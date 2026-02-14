@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C4LBGZL22Q"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-C4LBGZL22Q');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>If you know you know</title>
@@ -21,11 +28,107 @@
             text-align: center;
             color: black;
         }
+
+        .buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .vote-btn {
+            font-size: 2rem;
+            background: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            padding: 0.6rem 1.5rem;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        .vote-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .vote-btn:active {
+            transform: scale(0.95);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            pointer-events: none;
+            animation: confetti-fall 1s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(300px) rotate(720deg) scale(0.5);
+            }
+        }
     </style>
+    <script>
+        function sadRain(e) {
+            var rect = e.target.getBoundingClientRect();
+            var drop = document.createElement('div');
+            drop.style.position = 'fixed';
+            drop.style.left = (rect.left + rect.width / 2 - 15) + 'px';
+            drop.style.top = rect.top + 'px';
+            drop.style.fontSize = '30px';
+            drop.style.pointerEvents = 'none';
+            drop.style.zIndex = '9999';
+            drop.textContent = '💔';
+            document.body.appendChild(drop);
+            drop.animate([
+                { transform: 'translateY(0)', opacity: 1 },
+                { transform: 'translateY(300px)', opacity: 0 }
+            ], { duration: 1500, easing: 'cubic-bezier(0.4, 0, 1, 1)' });
+            setTimeout(function() { drop.remove(); }, 1500);
+        }
+
+        function confetti(e) {
+            var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b', '#cc5de8'];
+            var rect = e.target.getBoundingClientRect();
+            var x = rect.left + rect.width / 2;
+            var y = rect.top + rect.height / 2;
+            for (var i = 0; i < 30; i++) {
+                var piece = document.createElement('div');
+                piece.className = 'confetti';
+                piece.style.left = x + 'px';
+                piece.style.top = y + 'px';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                var angle = Math.random() * 2 * Math.PI;
+                var velocity = 80 + Math.random() * 120;
+                var dx = Math.cos(angle) * velocity;
+                var dy = Math.sin(angle) * velocity - 100;
+                piece.style.animation = 'none';
+                document.body.appendChild(piece);
+                piece.animate([
+                    { transform: 'translate(0, 0) rotate(0deg) scale(1)', opacity: 1 },
+                    { transform: 'translate(' + dx + 'px, ' + dy + 'px) rotate(720deg) scale(0.3)', opacity: 0 }
+                ], { duration: 800 + Math.random() * 400, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' });
+                setTimeout(function(el) { el.remove(); }.bind(null, piece), 1200);
+            }
+        }
+    </script>
 </head>
 <body>
-    <div class="emoji-text">
-        🥟 ❤️ 🐌
+    <div>
+        <div class="emoji-text">
+            🐌 ❤️ 🥟 ? 🥺
+        </div>
+        <div class="buttons">
+            <button class="vote-btn" onclick="gtag('event', 'vote_yes'); confetti(event)">👍</button>
+            <button class="vote-btn" onclick="gtag('event', 'vote_no'); sadRain(event)">👎</button>
+        </div>
     </div>
 </body>
 </html>
